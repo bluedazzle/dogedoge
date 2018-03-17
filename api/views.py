@@ -237,7 +237,7 @@ class GiftListView(CheckTokenMixin, StatusWrapMixin, MultipleJsonResponseMixin, 
     paginate_by = 20
 
     def get_queryset(self):
-        return super(GiftListView, self).get_queryset().filter(belong=self.user).order_by('-create_time')
+        return super(GiftListView, self).get_queryset().filter(belong=self.user, use=False).order_by('-create_time')
 
 
 class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
