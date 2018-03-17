@@ -158,7 +158,7 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
     def post(self, request, *args, **kwargs):
         nick = request.POST.get('nick')
         avatar = request.POST.get('avatar')
-        male = request.POST.get('male')
+        male = int(request.POST.get('male', 1))
         age = request.POST.get('age')
         sports = request.POST.get('sports')
         foods = request.POST.get('foods')
@@ -185,9 +185,7 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
         user.country = country
         user.province = province
         user.save()
-        resp = self.render_to_response({'user': user})
-        resp.set_cookie('token', token, max_age=60 * 60 * 24)
-        return resp
+        return self.render_to_response({'user': user})
 
 
 class GiftListView(CheckTokenMixin, StatusWrapMixin, MultipleJsonResponseMixin, ListView):
