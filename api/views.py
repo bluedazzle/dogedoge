@@ -172,6 +172,8 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
             token = self.generate_session()
             user = TTUser(user_id=user_id)
             user.token = token
+            user.money = 0.0
+            user.pick = 0.0
         user.nick = nick
         user.avatar = avatar
         user.male = male
