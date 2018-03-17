@@ -22,7 +22,7 @@ class TTUser(BaseModel):
 
     user_id = models.CharField(max_length=128, unique=True)
     token = models.CharField(max_length=128, unique=True)
-    nick = models.CharField(max_length=100, default='')
+    nick = models.CharField(max_length=100, default='', null=True, blank=True)
     male = models.IntegerField(default=1, choices=sex_choices)
     money = models.FloatField(default=0)
     last_pick_time = models.DateTimeField(default=datetime.datetime.now())
