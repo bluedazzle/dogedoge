@@ -131,7 +131,11 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         if not pet:
             return self.render_to_response({})
         self.calculate_shit()
-        return self.render_to_response({'pet': pet})
+        ps = PetShip.objects.filter(sender=pet, read=False)
+        new = False
+        if ps.exists():
+            new = True
+        return self.render_to_response({'pet': pet, 'new': new})
 
     def post(self, request, *args, **kwargs):
         if not self.wrap_check_token_result():
