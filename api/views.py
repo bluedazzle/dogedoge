@@ -16,7 +16,7 @@ from core.Mixin.CheckMixin import CheckSecurityMixin, CheckTokenMixin
 from core.Mixin.JsonRequestMixin import JsonRequestMixin
 from core.Mixin.StatusWrapMixin import StatusWrapMixin
 from core.dss.Mixin import MultipleJsonResponseMixin, JsonResponseMixin
-from core.models import Goods, TTUser, Pet, Gift
+from core.models import Goods, TTUser, Pet, Gift, PetShip
 import core.Mixin.StatusWrapMixin as SW
 
 
@@ -169,8 +169,9 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
         user_id = request.POST.get('user_id')
         user = self.get_user(user_id)
         if not user:
+            token = self.generate_session()
             user = TTUser(user_id=user_id)
-            user.token = self.generate_session()
+            user.token = token
         user.nick = nick
         user.avatar = avatar
         user.male = male
@@ -182,7 +183,9 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
         user.country = country
         user.province = province
         user.save()
-        return self.render_to_response({'user': user})
+        resp = self.render_to_response({'user': user})
+        resp.set_cookie('token', token, max_age=60 * 60 * 24)
+        return resp
 
 
 class GiftListView(CheckTokenMixin, StatusWrapMixin, MultipleJsonResponseMixin, ListView):
@@ -267,6 +270,30 @@ class EncounterListView(CheckTokenMixin, StatusWrapMixin, MultipleJsonResponseMi
     """
     邂逅列表
     """
+    model = PetShip
+    paginate_by = 20
+    foreign = True
+    exclude_attr = ['token', 'goods', 'sender', 'sender_gift', 'eated', 'showerd']
 
     def get_queryset(self):
-        pass
+        queryset = super(EncounterListView, self).get_queryset().filter(sender=self.user.user_pet.all()).order_by(
+            'read',
+            '-create_time')
+        return queryset
+
+
+class EncounterView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
+    """
+    邂逅
+    """
+
+    model = PetShip
+    pk_url_kwarg = 'mid'
+    exclude_attr = ['token', 'goods', 'sender', 'sender_gift', 'eated', 'showerd']
+    foreign = True
+
+    def get_object(self, queryset=None):
+        obj = super(EncounterView, self).get_object()
+        obj.read = True
+        obj.save()
+        return obj

@@ -504,3 +504,203 @@ GET /api/v1/pet/action/
   "msg": "数据缺失"
 }
 ```
+
+
+# **邂逅列表接口**
+
+```
+GET /api/v1/encounters/
+```
+
+### **Parameters**
+
+### **Return**
+
+成功
+```
+{
+　　"body":{
+　　　　"petship_list":[
+　　　　　　{
+　　　　　　　　"receiver_id":4,
+　　　　　　　　"read":true,
+　　　　　　　　"receiver_gift_id":2,
+　　　　　　　　"sender_id":2,
+　　　　　　　　"receiver_gift":{
+　　　　　　　　　　"picture":"",
+　　　　　　　　　　"use":false,
+　　　　　　　　　　"name":"毛线团",
+　　　　　　　　　　"goods_id":2,
+　　　　　　　　　　"belong":{
+　　　　　　　　　　　　"province":"青海省",
+　　　　　　　　　　　　"city":"西宁",
+　　　　　　　　　　　　"user_id":"123",
+　　　　　　　　　　　　"money":0,
+　　　　　　　　　　　　"last_pick_time":"2018-03-17 21:06:31",
+　　　　　　　　　　　　"sports":"羽毛球",
+　　　　　　　　　　　　"country":"中国",
+　　　　　　　　　　　　"nick":"用户昵称",
+　　　　　　　　　　　　"foods":"牛肉",
+　　　　　　　　　　　　"create_time":"2018-03-17 21:01:27",
+　　　　　　　　　　　　"modify_time":"2018-03-17 22:41:20",
+　　　　　　　　　　　　"pick":0,
+　　　　　　　　　　　　"male":1,
+　　　　　　　　　　　　"travel":"宅1",
+　　　　　　　　　　　　"id":4,
+　　　　　　　　　　　　"avatar":"http://static.rapospectre.com/bianhua@icon.png"
+　　　　　　　　　　},
+　　　　　　　　　　"belong_id":4,
+　　　　　　　　　　"create_time":"2018-03-17 21:11:08",
+　　　　　　　　　　"modify_time":"2018-03-17 21:11:08",
+　　　　　　　　　　"id":2
+　　　　　　　　},
+　　　　　　　　"create_time":"2018-03-17 22:52:44",
+　　　　　　　　"modify_time":"2018-03-17 23:17:49",
+　　　　　　　　"receiver":{
+　　　　　　　　　　"picture":"",
+　　　　　　　　　　"name":"用户昵称的狗子",
+　　　　　　　　　　"wish":"3",
+　　　　　　　　　　"belong":{
+　　　　　　　　　　　　"province":"青海省",
+　　　　　　　　　　　　"city":"西宁",
+　　　　　　　　　　　　"user_id":"123",
+　　　　　　　　　　　　"money":0,
+　　　　　　　　　　　　"last_pick_time":"2018-03-17 21:06:31",
+　　　　　　　　　　　　"sports":"羽毛球",
+　　　　　　　　　　　　"country":"中国",
+　　　　　　　　　　　　"nick":"用户昵称",
+　　　　　　　　　　　　"foods":"牛肉",
+　　　　　　　　　　　　"create_time":"2018-03-17 21:01:27",
+　　　　　　　　　　　　"modify_time":"2018-03-17 22:41:20",
+　　　　　　　　　　　　"pick":0,
+　　　　　　　　　　　　"male":1,
+　　　　　　　　　　　　"travel":"宅1",
+　　　　　　　　　　　　"id":4,
+　　　　　　　　　　　　"avatar":"http://static.rapospectre.com/bianhua@icon.png"
+　　　　　　　　　　},
+　　　　　　　　　　"character":"2",
+　　　　　　　　　　"belong_id":4,
+　　　　　　　　　　"sex":1,
+　　　　　　　　　　"create_time":"2018-03-17 21:06:05",
+　　　　　　　　　　"modify_time":"2018-03-17 21:42:27",
+　　　　　　　　　　"type":1,
+　　　　　　　　　　"id":4
+　　　　　　　　},
+　　　　　　　　"id":1,
+　　　　　　　　"sender_gift_id":1
+　　　　　　}
+　　　　],
+　　　　"page_obj":{
+
+　　　　},
+　　　　"is_paginated":false
+　　},
+　　"status":1,
+　　"msg":"success"
+}
+```
+失败
+```
+{
+  "body": {},
+  "status": 4,
+  "msg": "数据缺失"
+}
+```
+
+
+# **邂逅接口**
+
+```
+GET /api/v1/encounter/{mid}/
+```
+
+### **Parameters**
+
+### **Return**
+
+成功
+```
+{
+　　"body":{
+　　　　"petship":{
+　　　　　　"receiver_id":4,
+　　　　　　"read":true,
+　　　　　　"receiver_gift_id":2,
+　　　　　　"sender_id":2,
+　　　　　　"receiver_gift":{
+　　　　　　　　"picture":"",
+　　　　　　　　"use":false,
+　　　　　　　　"name":"毛线团",
+　　　　　　　　"goods_id":2,
+　　　　　　　　"belong":{
+　　　　　　　　　　"province":"青海省",
+　　　　　　　　　　"city":"西宁",
+　　　　　　　　　　"user_id":"123",
+　　　　　　　　　　"money":0,
+　　　　　　　　　　"last_pick_time":"2018-03-17 21:06:31",
+　　　　　　　　　　"sports":"羽毛球",
+　　　　　　　　　　"country":"中国",
+　　　　　　　　　　"nick":"用户昵称",
+　　　　　　　　　　"foods":"牛肉",
+　　　　　　　　　　"create_time":"2018-03-17 21:01:27",
+　　　　　　　　　　"modify_time":"2018-03-17 22:41:20",
+　　　　　　　　　　"pick":0,
+　　　　　　　　　　"male":1,
+　　　　　　　　　　"travel":"宅1",
+　　　　　　　　　　"id":4,
+　　　　　　　　　　"avatar":"http://static.rapospectre.com/bianhua@icon.png"
+　　　　　　　　},
+　　　　　　　　"belong_id":4,
+　　　　　　　　"create_time":"2018-03-17 21:11:08",
+　　　　　　　　"modify_time":"2018-03-17 21:11:08",
+　　　　　　　　"id":2
+　　　　　　},
+　　　　　　"create_time":"2018-03-17 22:52:44",
+　　　　　　"modify_time":"2018-03-17 23:26:02",
+　　　　　　"receiver":{
+　　　　　　　　"picture":"",
+　　　　　　　　"name":"用户昵称的狗子",
+　　　　　　　　"wish":"3",
+　　　　　　　　"belong":{
+　　　　　　　　　　"province":"青海省",
+　　　　　　　　　　"city":"西宁",
+　　　　　　　　　　"user_id":"123",
+　　　　　　　　　　"money":0,
+　　　　　　　　　　"last_pick_time":"2018-03-17 21:06:31",
+　　　　　　　　　　"sports":"羽毛球",
+　　　　　　　　　　"country":"中国",
+　　　　　　　　　　"nick":"用户昵称",
+　　　　　　　　　　"foods":"牛肉",
+　　　　　　　　　　"create_time":"2018-03-17 21:01:27",
+　　　　　　　　　　"modify_time":"2018-03-17 22:41:20",
+　　　　　　　　　　"pick":0,
+　　　　　　　　　　"male":1,
+　　　　　　　　　　"travel":"宅1",
+　　　　　　　　　　"id":4,
+　　　　　　　　　　"avatar":"http://static.rapospectre.com/bianhua@icon.png"
+　　　　　　　　},
+　　　　　　　　"character":"2",
+　　　　　　　　"belong_id":4,
+　　　　　　　　"sex":1,
+　　　　　　　　"create_time":"2018-03-17 21:06:05",
+　　　　　　　　"modify_time":"2018-03-17 21:42:27",
+　　　　　　　　"type":1,
+　　　　　　　　"id":4
+　　　　　　},
+　　　　　　"id":1,
+　　　　　　"sender_gift_id":1
+　　　　}
+　　},
+　　"status":1,
+　　"msg":"success"
+}
+```
+失败
+```
+{
+  "body": {},
+  "status": 4,
+  "msg": "数据缺失"
+}
+```

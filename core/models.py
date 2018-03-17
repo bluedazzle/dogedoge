@@ -80,8 +80,6 @@ class Pet(BaseModel):
     eated = models.BooleanField(default=False)
 
     belong = models.ForeignKey(TTUser, related_name='user_pet')
-    encounter = models.ManyToManyField("self", related_name='pet_list', through='PetShip', symmetrical=False,
-                                       through_fields=('sender', 'receiver'))
 
     def __unicode__(self):
         return '{0}-{1}'.format(self.belong.nick, self.name)

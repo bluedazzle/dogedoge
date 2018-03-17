@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^gifts/$', GiftListView.as_view()),
     url(r'^pet/action/$', PetServiceView.as_view()),
     url(r'^pick/$', ShitView.as_view()),
+    url(r'^encounters/$', EncounterListView.as_view()),
+    url(r'^encounter/(?P<mid>(\d)+)/$', EncounterView.as_view()),
 ]

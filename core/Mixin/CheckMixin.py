@@ -102,12 +102,17 @@ class CheckTokenMixin(object):
     def get(self, request, *args, **kwargs):
         if not self.wrap_check_token_result():
             return self.render_to_response({})
-        return super(CheckTokenMixin, self).get(request, *args, **kwargs)
+        resp = super(CheckTokenMixin, self).get(request, *args, **kwargs)
+        resp.set_cookie('token', self.token, max_age=60 * 60 * 24)
+        return resp
 
     def post(self, request, *args, **kwargs):
         if not self.wrap_check_token_result():
             return self.render_to_response({})
-        return super(CheckTokenMixin, self).post(request, *args, **kwargs)
+        resp = super(CheckTokenMixin, self).post(request, *args, **kwargs)
+        resp.set_cookie('token', self.token, max_age=60 * 60 * 24)
+        return resp
+
 #
 #
 # class CheckAdminPermissionMixin(object):
