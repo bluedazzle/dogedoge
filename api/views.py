@@ -208,6 +208,7 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
     model = Pet
     http_method_names = ['get']
     include_attr = ['user_id', 'id', 'money', 'eated', 'showerd', 'belong']
+    foreign = True
 
     def get_object(self, queryset=None):
         objs = Pet.objects.filter(belong=self.user)
