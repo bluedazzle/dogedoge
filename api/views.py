@@ -207,7 +207,7 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
     """
     model = Pet
     http_method_names = ['get']
-    include_attr = ['user_id', 'id', 'money', 'eated', 'showerd']
+    include_attr = ['user_id', 'id', 'money', 'eated', 'showerd', 'belong']
 
     def get_object(self, queryset=None):
         objs = Pet.objects.filter(belong=self.user)
@@ -230,7 +230,7 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
             obj.eated = True
             self.user.save()
             obj.save()
-            return self.user
+            return obj
         else:
             if obj.showerd:
                 self.message = '不需要洗澡'
@@ -244,7 +244,7 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
             obj.showerd = True
             self.user.save()
             obj.save()
-            return self.user
+            return obj
 
 
 class ShitView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
