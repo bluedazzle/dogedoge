@@ -215,7 +215,7 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
             token = self.generate_session()
             user = TTUser(user_id=user_id)
             user.token = token
-            user.money = 0.0
+            user.money = 30.0
             user.pick = 0.0
             self.message = 'success'
             self.status_code = SW.INFO_SUCCESS
@@ -265,8 +265,8 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
                 ms.delete()
             match = Match(pet=obj)
             # 特征
-            match.character = 0x01
-            match.wish = 0x01
+            # match.character = 0x01
+            # match.wish = 0x01
             match.save()
         return True
 

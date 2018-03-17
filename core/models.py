@@ -24,7 +24,7 @@ class TTUser(BaseModel):
     token = models.CharField(max_length=128, unique=True)
     nick = models.CharField(max_length=100, default='', null=True, blank=True)
     male = models.IntegerField(default=1, choices=sex_choices, null=True, blank=True)
-    money = models.FloatField(default=0)
+    money = models.FloatField(default=30)
     last_pick_time = models.DateTimeField(default=datetime.datetime.now())
     pick = models.IntegerField(default=0)
     avatar = models.CharField(max_length=128, default='', null=True, blank=True)
@@ -105,8 +105,8 @@ class PetShip(BaseModel):
 
 class Match(BaseModel):
     pet = models.OneToOneField(Pet, related_name='pet_match')
-    wish = models.BinaryField()
-    character = models.BinaryField()
+    wish = models.BinaryField(null=True, blank=True)
+    character = models.BinaryField(null=True, blank=True)
 
     def __unicode__(self):
         return self.pet.name
