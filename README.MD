@@ -471,7 +471,7 @@ GET /api/v1/pick/
 ```
 
 
-# **捡屎接口**
+# **喂食、洗澡接口**
 
 ```
 GET /api/v1/pet/action/

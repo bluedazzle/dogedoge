@@ -36,7 +36,7 @@ class TTUser(BaseModel):
     travel = models.CharField(max_length=200, default='', null=True, blank=True)
 
     def __unicode__(self):
-        return self.nick
+        return '{0}-{1}'.format(self.user_id, self.nick)
 
 
 class Goods(BaseModel):
