@@ -486,10 +486,15 @@ GET /api/v1/pet/action/
 ```
 {
 　　"body":{
-　　　　"ttuser":{
-　　　　　　"money":0,
-　　　　　　"user_id":"123",
-　　　　　　"id":4
+　　　　"pet":{
+　　　　　　"showerd":true,
+　　　　　　"belong":{
+　　　　　　　　"money":4,
+　　　　　　　　"user_id":"321",
+　　　　　　　　"id":2
+　　　　　　},
+　　　　　　"eated":false,
+　　　　　　"id":2
 　　　　}
 　　},
 　　"status":1,
