@@ -68,7 +68,7 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         if pets.exists():
             return pets[0]
         self.message = '宠物不存在'
-        self.status_code = SW.ERROR_DATA
+        self.status_code = SW.INFO_NO_EXIST
         return False
 
     def calculate_shit(self):
