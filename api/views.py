@@ -60,7 +60,8 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
     """
     model = Pet
     include_attr = ['user_id', 'nick', 'male', 'avatar', 'city', 'country', 'province', 'name', 'type', 'sex',
-                    'character', 'wish', 'picture', 'showerd', 'eated', 'belong', 'money', 'pick']
+                    'character', 'wish', 'picture', 'showerd', 'eated', 'belong', 'money', 'pick', 'return_time',
+                    'out_time', 'matched']
     foreign = True
     http_method_names = ['get', 'post']
 
