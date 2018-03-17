@@ -27,7 +27,7 @@ class TTUser(BaseModel):
     money = models.FloatField(default=30)
     last_pick_time = models.DateTimeField(default=datetime.datetime.now())
     pick = models.IntegerField(default=0)
-    avatar = models.CharField(max_length=128, default='', null=True, blank=True)
+    avatar = models.CharField(max_length=512, default='', null=True, blank=True)
     country = models.CharField(max_length=50, default='', null=True, blank=True)
     city = models.CharField(max_length=50, default='', null=True, blank=True)
     province = models.CharField(max_length=50, default='', null=True, blank=True)
