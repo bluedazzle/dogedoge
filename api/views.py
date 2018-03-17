@@ -174,6 +174,8 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
             user.token = token
             user.money = 0.0
             user.pick = 0.0
+            self.message = 'success'
+            self.status_code = SW.INFO_SUCCESS
         user.nick = nick
         user.avatar = avatar
         user.male = male
