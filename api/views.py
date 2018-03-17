@@ -48,8 +48,7 @@ class GoodsView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView)
             self.status_code = SW.ERROR_DATA
             return self.render_to_response({})
         self.user.money = self.user.money - goods.price
-        gift = Gift(name=goods.name, picture=goods.picture, belong=self.user, goods=goods)
-        gift.save()
+        Gift(name=goods.name, picture=goods.picture, belong=self.user, goods=goods).save()
         self.user.save()
         return self.render_to_response({'user': self.user, 'price': goods.price})
 
