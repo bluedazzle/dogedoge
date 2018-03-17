@@ -18,8 +18,8 @@ from django.contrib import admin
 from api.views import *
 
 urlpatterns = [
+    url(r'^goods/(?P<gid>(\d)+)/$', GoodsView.as_view()),
     url(r'^goods/$', GoodsListView.as_view()),
-    url(r'^good/(?P<gid>(\d)+)/$', GoodsView.as_view()),
     url(r'^user/$', UserInfoView.as_view()),
     url(r'^user/pet/$', PetUserInfo.as_view()),
     url(r'^gifts/$', GiftListView.as_view()),
