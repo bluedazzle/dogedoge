@@ -16,7 +16,7 @@ from core.Mixin.CheckMixin import CheckSecurityMixin, CheckTokenMixin
 from core.Mixin.JsonRequestMixin import JsonRequestMixin
 from core.Mixin.StatusWrapMixin import StatusWrapMixin
 from core.dss.Mixin import MultipleJsonResponseMixin, JsonResponseMixin
-from core.models import Goods, TTUser, Pet, Gift, PetShip
+from core.models import Goods, TTUser, Pet, Gift, PetShip, Match
 import core.Mixin.StatusWrapMixin as SW
 
 
@@ -37,7 +37,7 @@ class GoodsView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView)
     model = Goods
     pk_url_kwarg = 'gid'
     http_method_names = ['post', 'get']
-    include_attr = ['money', 'nick']
+    include_attr = ['money', 'nick', 'price']
 
     def post(self, request, *args, **kwargs):
         if not self.wrap_check_token_result():
@@ -48,9 +48,10 @@ class GoodsView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView)
             self.status_code = SW.ERROR_DATA
             return self.render_to_response({})
         self.user.money = self.user.money - goods.price
-        Gift(name=goods.name, picture=goods.picture, belong=self.user, goods=goods).save()
+        gift = Gift(name=goods.name, picture=goods.picture, belong=self.user, goods=goods)
+        gift.save()
         self.user.save()
-        return self.render_to_response({'user': self.user})
+        return self.render_to_response({'user': self.user, 'price': goods.price})
 
 
 class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
@@ -85,6 +86,41 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         self.user.pick = p_num if p_num <= MAX_SHIT_NUM else MAX_SHIT_NUM
         self.user.save()
         return True
+
+    def clear_pet(self, pet):
+        pet.eated = False
+        pet.matched = False
+        pet.gift = None
+        pet.showerd = False
+        pet.save()
+
+    def match_doge(self):
+        now = datetime.datetime.now(tz=get_current_timezone())
+        pet = self.user.user_pet.all()[0]
+        if not pet.matched:
+            return True
+        if now < pet.return_time:
+            return True
+        matches = Match.objects.filter(pet=pet)
+        if not matches.exists():
+            self.clear_pet(pet)
+            return True
+        me = match[0]
+        # 匹配逻辑
+        matches = Match.objects.exclude(pet=pet)
+        num = matches.count()
+        if num == 0:
+            self.clear_pet(pet)
+            return True
+        match = matches[random.randint(0, num - 1)]
+        self.create_encounter(me, match)
+        return True
+
+    def create_encounter(self, me, match):
+        PetShip(sender=me.pet, receiver=match.pet, sender_gift=me.pet.gift, receiver_gift=match.pet.gift).save()
+        PetShip(sender=match.pet, receiver=me.pet, sender_gift=match.pet.gift, receiver_gift=me.pet.gift).save()
+        me.delete()
+        match.delete()
 
     def get(self, request, *args, **kwargs):
         super(PetUserInfo, self).get(request, *args, **kwargs)
@@ -210,6 +246,23 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
     include_attr = ['user_id', 'id', 'money', 'eated', 'showerd', 'belong']
     foreign = True
 
+    def travel(self, obj):
+        now = datetime.datetime.now(tz=get_current_timezone())
+        if obj.eated and obj.showerd and not obj.matched:
+            obj.out_time = now + datetime.timedelta(minutes=random.randint(10, 30))
+            obj.return_time = now + datetime.timedelta(hours=random.randint(1, 10))
+            obj.matched = True
+            ms = Match.objects.filter(pet=obj)
+            if ms.exists():
+                ms = ms[0]
+                ms.delete()
+            match = Match(pet=obj)
+            # 特征
+            match.character = 0x01
+            match.wish = 0x01
+            match.save()
+        return True
+
     def get_object(self, queryset=None):
         objs = Pet.objects.filter(belong=self.user)
         if not objs.exists():
@@ -229,6 +282,7 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
                 self.status_code = SW.ERROR_DATA
                 return False
             obj.eated = True
+            self.travel(obj)
             self.user.save()
             obj.save()
             return obj
@@ -243,6 +297,7 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
                 self.status_code = SW.ERROR_DATA
                 return False
             obj.showerd = True
+            self.travel(obj)
             self.user.save()
             obj.save()
             return obj
@@ -300,3 +355,36 @@ class EncounterView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailV
         obj.read = True
         obj.save()
         return obj
+
+
+class GiftTakeView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
+    """
+    带礼物接口
+    """
+
+    model = Pet
+    pet = None
+
+    def get_object(self, queryset=None):
+        self.pet = self.user.user_pet.all()[0]
+        return self.pet
+
+    def get(self, request, *args, **kwargs):
+        super(GiftTakeView, self).get(request, *args, **kwargs)
+        if self.pet.gift:
+            self.message = '已经带礼物啦'
+            self.status_code = SW.INFO_EXISTED
+            return self.render_to_response({})
+        gid = request.GET.get('gid')
+        if gid:
+            gifts = Gift.objects.filter(id=gid, belong=self.user, use=False)
+            if gifts.exists():
+                gift = gifts[0]
+                self.pet.gift = gift
+                self.pet.save()
+                gift.use = True
+                gift.save()
+                return self.render_to_response({})
+        self.message = '未知错误'
+        self.status_code = SW.ERROR_DATA
+        return self.render_to_response({})

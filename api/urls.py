@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^user/$', UserInfoView.as_view()),
     url(r'^user/pet/$', PetUserInfo.as_view()),
     url(r'^gifts/$', GiftListView.as_view()),
+    url(r'^gift/$', GiftTakeView.as_view()),
     url(r'^pet/action/$', PetServiceView.as_view()),
     url(r'^pick/$', ShitView.as_view()),
     url(r'^encounters/$', EncounterListView.as_view()),

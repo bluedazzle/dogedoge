@@ -76,8 +76,13 @@ class Pet(BaseModel):
     wish = models.CharField(max_length=10, default='')
     picture = models.CharField(max_length=120)
 
+    return_time = models.DateTimeField(null=True, blank=True)
+    out_time = models.DateTimeField(null=True, blank=True)
+    matched = models.BooleanField(default=False)
+
     showerd = models.BooleanField(default=False)
     eated = models.BooleanField(default=False)
+    gift = models.ForeignKey(Gift, related_name='pet_equ_gift', null=True, blank=True)
 
     belong = models.ForeignKey(TTUser, related_name='user_pet')
 
@@ -96,3 +101,12 @@ class PetShip(BaseModel):
 
     def __unicode__(self):
         return '{0}->{1}'.format(self.sender.name, self.receiver.name)
+
+
+class Match(BaseModel):
+    pet = models.OneToOneField(Pet, related_name='pet_match')
+    wish = models.BinaryField()
+    character = models.BinaryField()
+
+    def __unicode__(self):
+        return self.pet.name
