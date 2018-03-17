@@ -7,7 +7,7 @@ DogeDoge API
 
 **api_version: v1**
 
-#概要
+# 概要
 
  2. API请求格式：host + "api" + api_version + 请求地址。（eg: http://zhz.chafanbao.com/api/v1/tanks）
  3. API返回格式：`json:{"status":1,"body":{}}`status返回操作结果码,body包含返回信息，如果无返回信息，body为空。
