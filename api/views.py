@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import hashlib
 import random
 import string
 
@@ -10,6 +11,7 @@ from django.utils.timezone import get_current_timezone
 from django.views.generic import DetailView
 from django.views.generic import ListView
 
+from Doger.settings import STATIC_ROOT
 from api.consts import FOOD_PRICE, SHOWER_PRICE, MAX_SHIT_NUM, CREATE_SHIT_PERIOD
 from api.utils import deduction
 from core.Mixin.CheckMixin import CheckSecurityMixin, CheckTokenMixin
@@ -62,6 +64,7 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
                     'character', 'wish', 'picture', 'showerd', 'eated', 'belong', 'money', 'pick', 'return_time',
                     'out_time', 'matched']
     foreign = True
+    datetime_type = 'timestamp'
     http_method_names = ['get', 'post']
 
     def get_object(self, queryset=None):
@@ -388,3 +391,25 @@ class GiftTakeView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVi
         self.message = '未知错误'
         self.status_code = SW.ERROR_DATA
         return self.render_to_response({})
+
+
+class UploadImageView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
+
+    def generate_hash(*args):
+        string = ''.join(args)
+        return hashlib.md5(string).hexdigest()
+
+    def post(self, request, *args, **kwargs):
+        img_data = request.FILES.get('image')
+        # img = Image.open(img_data)
+        import time
+        name = self.generate_hash(img_data.name, unicode(time.time()))
+        from django.core.files.storage import default_storage
+        from django.core.files.base import ContentFile
+        default_storage.save('{0}image/{1}.png'.format(STATIC_ROOT, name), ContentFile(img_data.read()))
+        # f = open('{0}image/{1}.png'.format(STATIC_ROOT, name), "wb")
+        # f.write(img_data)
+        # f.close()
+        # img.save('{0}image/{1}.png'.formaat(STATIC_ROOT, name), "PNG")
+        return self.render_to_response({'url': 'https://doge.rapospectre.com/static/image/{0}.png'.format(name)})
+
