@@ -37,7 +37,7 @@ class GoodsView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView)
     model = Goods
     pk_url_kwarg = 'gid'
     http_method_names = ['post', 'get']
-    include_attr = ['money', 'nick', 'price']
+    include_attr = ['money', 'nick', 'price', 'user']
 
     def post(self, request, *args, **kwargs):
         if not self.wrap_check_token_result():
