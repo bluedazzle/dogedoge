@@ -1,5 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
+
+import datetime
 from django.db import models
 
 
@@ -18,15 +20,23 @@ class TTUser(BaseModel):
     sex_choices = [(0, '女'),
                    (1, '男')]
 
-    name = models.CharField(max_length=100)
-    open_id = models.CharField(max_length=128)
-    session = models.CharField(max_length=128)
-    nick = models.CharField(max_length=50, default='')
+    user_id = models.CharField(max_length=128, unique=True)
+    token = models.CharField(max_length=128, unique=True)
+    nick = models.CharField(max_length=100, default='')
     male = models.IntegerField(default=1, choices=sex_choices)
+    money = models.FloatField(default=0)
+    last_pick_time = models.DateTimeField(default=datetime.datetime.now())
+    pick = models.IntegerField(default=0)
     avatar = models.CharField(max_length=128, default='')
+    country = models.CharField(max_length=50, default='', null=True, blank=True)
+    city = models.CharField(max_length=50, default='', null=True, blank=True)
+    province = models.CharField(max_length=50, default='', null=True, blank=True)
+    sports = models.CharField(max_length=200, default='', null=True, blank=True)
+    foods = models.CharField(max_length=200, default='', null=True, blank=True)
+    travel = models.CharField(max_length=200, default='', null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return self.nick
 
 
 class Goods(BaseModel):
@@ -74,7 +84,7 @@ class Pet(BaseModel):
                                        through_fields=('sender', 'receiver'))
 
     def __unicode__(self):
-        return '{0}-{1}'.format(self.belong.name, self.name)
+        return '{0}-{1}'.format(self.belong.nick, self.name)
 
 
 class PetShip(BaseModel):
@@ -84,6 +94,7 @@ class PetShip(BaseModel):
                                     related_name='ps_sender_gift')
     receiver_gift = models.ForeignKey(Gift, on_delete=models.CASCADE, null=True, blank=True,
                                       related_name='ps_receiver_gift')
+    read = models.BooleanField(default=False)
 
     def __unicode__(self):
         return '{0}->{1}'.format(self.sender.name, self.receiver.name)

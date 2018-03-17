@@ -82,3 +82,51 @@ GET /api/v1/goods/
 }
 ```
 
+
+## **获取用户信息与宠物**
+
+```
+GET /api/v1/user/
+```
+
+### **Parameters**
+
+
+### **Return**
+
+成功
+```
+{
+　　"body":{
+　　　　"pet":{
+　　　　　　"picture":"2",
+　　　　　　"eated":false,
+　　　　　　"name":"2",
+　　　　　　"showerd":false,
+　　　　　　"wish":"2",
+　　　　　　"belong":{
+　　　　　　　　"province":"1",
+　　　　　　　　"city":"1",
+　　　　　　　　"user_id":"1",
+　　　　　　　　"country":"1",
+　　　　　　　　"nick":"1",
+　　　　　　　　"avatar":"1",
+　　　　　　　　"male":1
+　　　　　　},
+　　　　　　"character":"2",
+　　　　　　"sex":1,
+　　　　　　"type":1
+　　　　}
+　　},
+　　"status":1,
+　　"msg":"success"
+}
+```
+失败
+```
+{
+  "body": {},
+  "status": 4,
+  "msg": "数据缺失"
+}
+```

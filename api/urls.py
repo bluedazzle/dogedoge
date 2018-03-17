@@ -19,4 +19,10 @@ from api.views import *
 
 urlpatterns = [
     url(r'^goods/$', GoodsListView.as_view()),
+    url(r'^good/(?P<gid>(\d)+)/$', GoodsView.as_view()),
+    url(r'^user/$', UserInfoView.as_view()),
+    url(r'^user/pet/$', PetUserInfo.as_view()),
+    url(r'^gifts/$', GiftListView.as_view()),
+    url(r'^pet/action/$', PetServiceView.as_view()),
+    url(r'^pick/$', ShitView.as_view()),
 ]
