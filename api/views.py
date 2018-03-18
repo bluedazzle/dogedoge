@@ -90,6 +90,13 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         self.user.save()
         return True
 
+    def get_dog_url(self, dog_type):
+        dog_dict = {1: 'http://static.rapospectre.com/anfenghuang@icon.png',
+                    2: 'http://static.rapospectre.com/anfenghuang@icon.png',
+                    3: 'http://static.rapospectre.com/anfenghuang@icon.png',
+                    4: 'http://static.rapospectre.com/anfenghuang@icon.png'}
+        return dog_dict.get(dog_type, 1)
+
     def clear_pet(self, pet):
         pet.eated = False
         pet.matched = False
@@ -147,13 +154,14 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
             return self.render_to_response({})
         self.message = 'success'
         self.status_code = SW.INFO_SUCCESS
-        pet_type = request.POST.get('type')
+        pet_type = int(request.POST.get('type', 1))
         sex = request.POST.get('sex')
         character = request.POST.get('character')
         wish = request.POST.get('wish')
         pet = Pet()
         pet.name = '{0}的狗子'.format(self.user.nick)
         pet.sex = sex
+        pet.picture = self.get_dog_url(pet_type)
         pet.character = character
         pet.wish = wish
         pet.type = pet_type
@@ -229,6 +237,9 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
         user.city = city
         user.country = country
         user.province = province
+        pet = user.user_pet.all()[0]
+        pet.name = '{0}的狗子'.format(user.nick)
+        pet.save()
         user.save()
         return self.render_to_response({'user': user})
 
