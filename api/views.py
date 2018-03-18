@@ -91,10 +91,10 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         return True
 
     def get_dog_url(self, dog_type):
-        dog_dict = {1: 'http://static.rapospectre.com/anfenghuang@icon.png',
-                    2: 'http://static.rapospectre.com/anfenghuang@icon.png',
-                    3: 'http://static.rapospectre.com/anfenghuang@icon.png',
-                    4: 'http://static.rapospectre.com/anfenghuang@icon.png'}
+        dog_dict = {1: 'http://static.rapospectre.com/shapi.png',
+                    2: 'http://static.rapospectre.com/samoye.png',
+                    3: 'http://static.rapospectre.com/jinmao.png',
+                    4: 'http://static.rapospectre.com/badi.png'}
         return dog_dict.get(dog_type, 1)
 
     def clear_pet(self, pet):
@@ -409,7 +409,6 @@ class GiftTakeView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVi
 
 
 class UploadImageView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailView):
-
     def generate_hash(*args):
         string = ''.join(args)
         return hashlib.md5(string).hexdigest()
@@ -427,4 +426,3 @@ class UploadImageView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detai
         # f.close()
         # img.save('{0}image/{1}.png'.formaat(STATIC_ROOT, name), "PNG")
         return self.render_to_response({'url': 'https://doge.rapospectre.com/static/image/{0}.png'.format(name)})
-
