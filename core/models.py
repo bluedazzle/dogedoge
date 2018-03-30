@@ -42,6 +42,7 @@ class TTUser(BaseModel):
 class Goods(BaseModel):
     name = models.CharField(max_length=50)
     price = models.FloatField(default=1)
+    desc = models.CharField(max_length=128, null=True, blank=True)
     picture = models.CharField(max_length=128, default='', null=True, blank=True)
 
     def __unicode__(self):

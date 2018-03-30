@@ -27,7 +27,7 @@ class GoodsListView(CheckTokenMixin, StatusWrapMixin, MultipleJsonResponseMixin,
     商品列表
     """
     model = Goods
-    include_attr = ['id', 'name', 'price', 'picture']
+    include_attr = ['id', 'name', 'price', 'picture', 'desc']
     paginate_by = 20
     http_method_names = ['get', 'post']
 
@@ -135,6 +135,9 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
     def get(self, request, *args, **kwargs):
         super(PetUserInfo, self).get(request, *args, **kwargs)
         pet = self.get_object()
+        if len(pet.name) <= 4:
+            pet.name = '{0}的狗子'.format(self.user.nick)
+            pet.save()
         if not pet:
             return self.render_to_response({})
         self.calculate_shit()
@@ -143,6 +146,17 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         if ps.exists():
             new = True
         return self.render_to_response({'pet': pet, 'new': new})
+
+    def match_default(self):
+        re = self.user
+        mes = TTUser.objects.filter(
+            user_id__in=('50227463264', '53612212509', '80081895938', '68152714750', '52707073333'))
+        count = mes.count()
+        me = mes[random.randint(0, count - 1)]
+        if not PetShip.objects.filter(sender=me.user_pet.all()[0], receiver=re.user_pet.all()[0]).exists():
+            PetShip(sender=me.user_pet.all()[0], receiver=re.user_pet.all()[0]).save()
+        if not PetShip.objects.filter(sender=re.user_pet.all()[0], receiver=me.user_pet.all()[0]).exists():
+            PetShip(sender=re.user_pet.all()[0], receiver=me.user_pet.all()[0]).save()
 
     def post(self, request, *args, **kwargs):
         if not self.wrap_check_token_result():
@@ -167,6 +181,7 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
         pet.type = pet_type
         pet.belong = self.user
         pet.save()
+        self.match_default()
         return self.render_to_response({'pet': pet})
 
 
@@ -176,7 +191,7 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
     """
     model = TTUser
     http_method_names = ['get', 'post']
-    include_attr = ['token', 'user_id', 'nick', 'money']
+    include_attr = ['token', 'user_id', 'nick', 'money', 'avatar']
 
     def generate_session(self, count=64):
         ran = string.join(
@@ -224,7 +239,7 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
             user = TTUser(user_id=user_id)
             user.token = token
             user.money = 30.0
-            user.pick = 0.0
+            user.pick = 8.0
             self.message = 'success'
             self.status_code = SW.INFO_SUCCESS
         user.nick = nick
@@ -237,9 +252,6 @@ class UserInfoView(StatusWrapMixin, JsonResponseMixin, DetailView):
         user.city = city
         user.country = country
         user.province = province
-        pet = user.user_pet.all()[0]
-        pet.name = '{0}的狗子'.format(user.nick)
-        pet.save()
         user.save()
         return self.render_to_response({'user': user})
 
@@ -267,8 +279,10 @@ class PetServiceView(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, Detail
     def travel(self, obj):
         now = datetime.datetime.now(tz=get_current_timezone())
         if obj.eated and obj.showerd and not obj.matched:
-            obj.out_time = now + datetime.timedelta(minutes=random.randint(10, 30))
-            obj.return_time = now + datetime.timedelta(hours=random.randint(1, 10))
+            obj.out_time = now + datetime.timedelta(minutes=random.randint(1, 5))
+            # obj.out_time = now + datetime.timedelta(minutes=random.randint(10, 30))
+            obj.return_time = now + datetime.timedelta(minutes=random.randint(6, 9))
+            # obj.return_time = now + datetime.timedelta(hours=random.randint(1, 10))
             obj.matched = True
             ms = Match.objects.filter(pet=obj)
             if ms.exists():
