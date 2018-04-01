@@ -135,6 +135,8 @@ class PetUserInfo(CheckTokenMixin, StatusWrapMixin, JsonResponseMixin, DetailVie
     def get(self, request, *args, **kwargs):
         super(PetUserInfo, self).get(request, *args, **kwargs)
         pet = self.get_object()
+        if not pet:
+            return self.render_to_response({})
         if len(pet.name) <= 4:
             pet.name = '{0}的狗子'.format(self.user.nick)
             pet.save()
